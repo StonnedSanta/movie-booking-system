@@ -4,18 +4,18 @@ public class Booking {
     
     private int bookingId;
     private User user;
-    private Movie movie;
+    private Show show;
     private int seatNumber;
     private double amount;
 
-    public Booking(int bookingId, User user, Movie movie, int seatNumber, double amount) {
+    public Booking(int bookingId, User user, Show show, int seatNumber, double amount) {
         if(seatNumber <= 0) {
             throw new IllegalArgumentException("Seat number must be positive");
         }
 
         this.bookingId = bookingId;
         this.user = user;
-        this.movie = movie;
+        this.show = show;
         this.seatNumber = seatNumber;
         this.amount = amount;
     }
@@ -28,8 +28,8 @@ public class Booking {
         return user;
     }
 
-    public Movie getMovie() {
-        return movie;
+    public Show getShow() {
+        return show;
     }
 
     public int getSeatNumber() {
@@ -45,7 +45,7 @@ public class Booking {
         return "Booking{" +
                 "bookingId=" + bookingId +
                 ", user=" + user +
-                ", movie=" + movie +
+                ", show=" + show +
                 ", seatNumber=" + seatNumber +
                 ", amount=" + amount +
                 '}';

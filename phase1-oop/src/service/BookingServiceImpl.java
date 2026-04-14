@@ -3,45 +3,37 @@ package service;
 import model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BookingServiceImpl implements BookingService {
 
-    private List<Movie> movies = new ArrayList<>();
+    private Map<Integer, Show> shows = new HashMap<>();
     private List<Booking> bookings = new ArrayList<>();
 
-    // add movie (helper method)
-    public void addMovie(Movie movie) {
-        movies.add(movie);
+    public void addShow(Show show) {
+        shows.put(show.getShowId(), show);
     }
+    
 
     @Override
-    public List<Movie> getAvailableMovies() {
-        return movies;
-    }
+    public Booking bookTicket(User user, int showId, int seatNumber) {
 
-    @Override
-    public List<Movie> getMoviesByGenre(String genre) {
-        List<Movie> result = new ArrayList<>();
+        Show show = shows.get(showId);
 
-        for (Movie movie : movies) {
-            if (movie.getGenre().equalsIgnoreCase(genre)) {
-                result.add(movie);
-            }
+        if(show == null) {
+            throw new IllegalArgumentException("Invalid show");
         }
-        return result;
-    }
 
-    @Override
-    public Booking bookTicket(User user, Movie movie, int seatNumber) {
-        if(!movie.isSeatAvilable(seatNumber)) {
+        if(!show.isSeatAvailable(seatNumber)) {
             throw new IllegalArgumentException("Seat already booked");
         }
 
-        movie.bookSeat(seatNumber);
+        show.bookedSeat(seatNumber);
 
-        double amount = calculateAmount(movie);
-        Booking booking = new Booking(bookings.size() + 1, user, movie, seatNumber, amount);
+        double amount = calculateAmount(show.getMovie());
+        Booking booking = new Booking(bookings.size() + 1, user, show, seatNumber, amount);
 
         bookings.add(booking);
 
@@ -52,4 +44,5 @@ public class BookingServiceImpl implements BookingService {
     public double calculateAmount(Movie movie) {
         return 200.0; //fixed as of now
     }
+
 }

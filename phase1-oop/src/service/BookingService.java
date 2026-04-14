@@ -5,9 +5,7 @@ import java.util.List;
 
 public interface BookingService {
 
-    List<Movie> getAvailableMovies();
-    List<Movie> getMoviesByGenre(String genre);
-    Booking bookTicket(User user, Movie movie, int seatNumber);
+    Booking bookTicket(User user, int showId, int seatNumber);
     double calculateAmount(Movie movie);
     
 }
