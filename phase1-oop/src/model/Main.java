@@ -11,8 +11,17 @@ public class Main {
         service.addMovie(movie1);
 
         User user = new User(101, "Anuj");
-        Booking booking = service.bookTicket(user, movie1, 5);
+        Booking booking1 = service.bookTicket(user, movie1, 5);
         
-        System.out.println(booking);
+        System.out.println(booking1);
+
+        try{
+            Booking booking2 = service.bookTicket(user, movie1, 5);
+            System.out.println(booking2); 
+        } catch(Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } 
+
+        System.out.println("Available Seats: " + movie1.getAvailableSeats(10));
     }
 }

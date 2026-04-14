@@ -34,6 +34,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking bookTicket(User user, Movie movie, int seatNumber) {
+        if(!movie.isSeatAvilable(seatNumber)) {
+            throw new IllegalArgumentException("Seat already booked");
+        }
+
+        movie.bookSeat(seatNumber);
 
         double amount = calculateAmount(movie);
         Booking booking = new Booking(bookings.size() + 1, user, movie, seatNumber, amount);
