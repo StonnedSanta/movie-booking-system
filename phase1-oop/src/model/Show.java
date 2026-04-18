@@ -47,7 +47,16 @@ public class Show {
         }
         return availableSeats;
     }
-    
+
+    public synchronized boolean tryBookSeat(int seatNumber) {
+        if(bookedSeats.contains(seatNumber)) {
+            return false;
+        }
+
+        bookedSeats.add(seatNumber);
+            return true;
+    }
+
     @Override
     public String toString() {
         return "Show{" +

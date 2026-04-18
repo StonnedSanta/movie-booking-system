@@ -26,7 +26,7 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalArgumentException("Invalid show");
         }
 
-        if(!show.isSeatAvailable(seatNumber)) {
+        if(!show.tryBookSeat(seatNumber)) {
             throw new IllegalArgumentException("Seat already booked");
         }
 

@@ -16,7 +16,7 @@ public class Main {
 
         Runnable task1 = () -> {
             try {
-                Booking b = service.bookTicket(user, 1, 7);
+                Booking b = service.bookTicket(user, 2, 7);
                 System.out.println("User1 booked: " + b);
             } catch (Exception e) {
                 System.out.println("User1 failed: " + e.getMessage());
@@ -25,7 +25,7 @@ public class Main {
 
         Runnable task2 = () -> {
             try {
-                Booking b = service.bookTicket(user, 1, 7);
+                Booking b = service.bookTicket(user, 1, 9);
                 System.out.println("User2 booked: " + b);
             } catch (Exception e) {
                 System.out.println("User2 failed: " + e.getMessage());
