@@ -1,6 +1,8 @@
 package model;
 
 import service.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,30 +14,24 @@ public class Main {
         Show show1 = new Show(1, movie1, "10:00 AM");
         service.addShow(show1);
 
-        User user = new User(101, "Anuj");
+        // User user = new User(101, "Anuj");
 
-        Runnable task1 = () -> {
-            try {
-                Booking b = service.bookTicket(user, 2, 7);
-                System.out.println("User1 booked: " + b);
-            } catch (Exception e) {
-                System.out.println("User1 failed: " + e.getMessage());
-            }
-        };
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
-        Runnable task2 = () -> {
-            try {
-                Booking b = service.bookTicket(user, 1, 9);
-                System.out.println("User2 booked: " + b);
-            } catch (Exception e) {
-                System.out.println("User2 failed: " + e.getMessage());
-            }
-        };
+        for (int i = 1; i <= 5; i++) {
+            int userId = i;
 
-        Thread t1 = new Thread(task1);
-        Thread t2 = new Thread(task2);
+            executor.submit(() -> {
+                try {
+                    User user = new User(userId, "User" + userId);
+                    Booking b = service.bookTicket(user, 1, 7);
+                    System.out.println("User" + userId + " booked: " + b);
+                } catch (Exception e) {
+                    System.out.println("User" + userId + " failed: " + e.getMessage());
+                }
+            });
+        }
 
-        t1.start();
-        t2.start();
+        executor.shutdown();
     }
 }
