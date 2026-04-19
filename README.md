@@ -1,26 +1,30 @@
 # Movie Booking System (Java)
-This project is a step-by-step implementation of a Movie Booking System built to strengthen core Java concepts and backend development skills.
+A phase-wise Java project built to strengthen backend fundamentals like OOP, collections, and concurrency by simulating a real-world movie ticket booking system.
 
 ---
 
 ## Features (Phase-wise Development)
 
-### Phase 1: OOP Design
+### Phases Covered
 
-* Designed core domain models: `Movie`, `User`, `Booking`
-* Applied encapsulation and object relationships
-* Implemented service layer using interfaces (`BookingService`)
-* Basic ticket booking functionality
+* Phase1 - OOP Design
+    Core models (`Movie`, `User`, `Booking`) and service layer
+* Phase2 - Collections & Show Design
+    Introduced `Show`, seat tracking, and `Map`-based management 
+* Phase3 - COncurrency & Multithreading
+    Handled race conditions using fine-grained locking
+    Implemented thread pools using `ExecutorService`
+    Used `Callable` and `Future` for async results
 
 ---
 
-## Concepts Covered
+## Key Concepts
 
-* Object-Oriented Programming (OOP)
-* Abstraction & Interfaces
-* Encapsulation
-* Basic Exception Handling
-* Clean Code Practices
+* OOP (Encapsulation, Abstraction)
+* Java Collections (List, Map, Set)
+* Multithreading & Synchronization
+* ExecutorService (Thread Pools)
+* Callable & Future (Async programming)
 
 ---
 
@@ -31,20 +35,9 @@ movie-booking-system/
 │
 ├── phase1-oop/
 ├── phase2-collections/
-├── phase3-exceptions/
-├── phase4-multithreading/
-├── phase5-java8/
-├── phase6-file-io/
-├── phase7-generics/
+├── phase3-concurrency/
 └── README.md
 ```
-
----
-
-## Goal
-
-To build a strong foundation in Java and evolve this project into a scalable backend system.
-
 ---
 
 ## Tech Stack
@@ -57,7 +50,10 @@ To build a strong foundation in Java and evolve this project into a scalable bac
 
 ## Status
 
-Currently in Phase 1 — OOP Design
+Phase 1 - Completed
+Phase 2 - Completed
+Phase 3 - Completed
+Next - Java 8 (Streams, CompletableFuture)
 
 ---
 
