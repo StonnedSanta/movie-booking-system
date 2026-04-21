@@ -50,10 +50,10 @@ movie-booking-system/
 
 ## Status
 
-Phase 1 - Completed
-Phase 2 - Completed
-Phase 3 - Completed
-Next - Java 8 (Streams, CompletableFuture)
+* Phase 1 - Completed
+* Phase 2 - Completed
+* Phase 3 - Completed
+* Next - Java 8 (Streams, CompletableFuture)
 
 ---
 

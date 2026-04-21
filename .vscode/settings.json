@@ -1,6 +1,6 @@
 {
     "java.project.sourcePaths": [
-        "phase1-oop/src"
+        "phase3-concurrency/src"
     ],
     "java.project.referencedLibraries": []
 }
