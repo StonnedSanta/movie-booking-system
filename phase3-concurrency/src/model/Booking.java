@@ -7,6 +7,7 @@ public class Booking {
     private Show show;
     private int seatNumber;
     private double amount;
+    private BookingStatus status;
 
     public Booking(int bookingId, User user, Show show, int seatNumber, double amount) {
         if(seatNumber <= 0) {
@@ -18,6 +19,8 @@ public class Booking {
         this.show = show;
         this.seatNumber = seatNumber;
         this.amount = amount;
+        
+        this.status = BookingStatus.PENDING;
     }
 
     public int getBookingId() {
@@ -38,6 +41,14 @@ public class Booking {
 
     public double getAmount() {
         return amount;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
     }
 
     @Override
