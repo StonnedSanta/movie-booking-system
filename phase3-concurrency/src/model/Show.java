@@ -36,6 +36,10 @@ public class Show {
         bookedSeats.add(seatNumber);
     }
 
+    public void releaseSeat(int seatNumber) {
+        bookedSeats.remove(seatNumber);
+    }
+
     public Set<Integer> getAvailableSeats(int totalSeats) {
 
         Set<Integer> availableSeats = new HashSet<>();
