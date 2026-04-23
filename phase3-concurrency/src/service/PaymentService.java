@@ -6,17 +6,34 @@ import model.Booking;
 
 public class PaymentService {
 
-    public CompletableFuture<String> processPayment(Booking booking) {
+    public CompletableFuture<String> processPaymentWithRetry(Booking booking, int maxRetries) {
         return CompletableFuture.supplyAsync(() -> {
+            int attempt = 0;
 
-            // simulate random failure
-            if (Math.random() < 0.3) {
-                throw new RuntimeException("Payment Failed");
+            while (attempt < maxRetries) {
+                try {
+                    attempt++;
+                    
+                    // simulate random failure
+                    if (Math.random() < 0.3) {
+                    throw new RuntimeException("Payment Failed");
+                    }
+
+                    return "SUCCESS for bookingId= " + booking.getBookingId()
+                            + "(attempt " + attempt + ")";
+                } catch (Exception e) {
+                    if (attempt == maxRetries) {
+                        throw new RuntimeException("Payment failed after " + maxRetries + " attempts");
+                    }
+
+                    System.out.println("Retrying payment for bookingId= "
+                            + booking.getBookingId() + " (attempt " + attempt + ")");
+
+                }
             }
 
-            try { Thread.sleep(500); } catch (Exception e) {}
-            
-            return "SUCCESS for bookindId = " + booking.getBookingId();
+                return "FAILED";
+
         });
     }
     

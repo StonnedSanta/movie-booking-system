@@ -38,7 +38,7 @@ public class Main {
 
                         // parallel tasks
                         CompletableFuture<String> paymentFuture = 
-                            paymentService.processPayment(booking);
+                            paymentService.processPaymentWithRetry(booking, 3);
 
                         CompletableFuture<String> notificationFuture =
                             notificationService.sendNotification(booking)
