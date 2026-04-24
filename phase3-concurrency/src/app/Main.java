@@ -28,51 +28,22 @@ public class Main {
         for (int i = 1; i <= 5; i++) {
             int userId = i;
 
+            User user = new User(userId, "User" + userId);
+
             CompletableFuture<Void> f =
-                CompletableFuture
-                    .supplyAsync(() -> {
-                        User user = new User(userId, "User" + userId);
-                        return service.bookTicket(user, 1, userId);
-                    })
-                    .thenCompose(booking -> {
-
-                        // parallel tasks
-                        CompletableFuture<String> paymentFuture = 
-                            paymentService.processPaymentWithRetry(booking, 3);
-
-                        CompletableFuture<String> notificationFuture =
-                            notificationService.sendNotification(booking)
-                                .exceptionally(ex -> {
-                                    System.out.println("Notification failed for bookingId = " + booking.getBookingId());
-                                    return "FAILED";
-                                });
-                        
-                        return paymentFuture
-                            .thenCompose(paymentResult -> {
-                                return CompletableFuture.allOf(notificationFuture)
-                                    .thenApply(v -> {
-                                        booking.setStatus(BookingStatus.CONFIRMED);
-                                        return "Booking CONFIRMED for bookingId= " + booking.getBookingId();
-                                    });
-                            })
-                            .exceptionally(ex -> {
-                                // rollback
-                                booking.setStatus(BookingStatus.FAILED);
-                                booking.getShow().releaseSeat(booking.getSeatNumber());
-
-                                System.out.println("Rollback done for bookingId= " + booking.getBookingId());
-                                throw new RuntimeException(ex.getCause().getMessage());
-                            });
-
-                    })
-                    .thenAccept(result -> {
-                        System.out.println("User" + userId + ": " + result);
-                    })
-                    .exceptionally(ex -> {
-                        System.out.println("User" + userId + " failed: " + ex.getCause().getMessage());
-                        return null;
-                    });    
-
+                service.bookWithPaymentAndNotification(
+                    user, 
+                    1, 
+                    userId, 
+                    paymentService, 
+                    notificationService
+                )
+                .thenAccept(result -> System.out.println("User" + userId + ": " + result))
+                .exceptionally(ex -> {
+                    System.out.println("User" + userId + " failed: " + ex.getCause().getMessage());
+                    return null;
+                });
+                
         futures.add(f);
     }
 
