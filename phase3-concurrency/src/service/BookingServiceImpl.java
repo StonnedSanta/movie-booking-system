@@ -3,9 +3,11 @@ package service;
 import model.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class BookingServiceImpl implements BookingService {
@@ -14,20 +16,85 @@ public class BookingServiceImpl implements BookingService {
     private List<Booking> bookings = new ArrayList<>();
     private List<Movie> movies = new ArrayList<>();
 
-    public void addShow(Show show) {
-        shows.put(show.getShowId(), show);
-    }
-
     public void addMovie(Movie movie) {
         movies.add(movie);
     }
 
+    public List<Movie> getAvailableMovies() {
+        return movies;
+    }
+
+    // Java 8 Stream - filter
     public List<Movie> getMoviesByGenre(String genre) {
         return movies.stream()
                 .filter(m -> m.getGenre().equalsIgnoreCase(genre))
                 .toList();
     }
 
+    // Java 8 Stream - map
+    public List<String> getMovieNames() {
+        return movies.stream()
+                .map(Movie::getName)
+                .toList();
+    }
+
+    // Java 8 Stream - sorting
+    public List<Movie> getMoviesSortedByRating() {
+        return movies.stream()
+                .sorted(Comparator.comparingDouble(Movie::getRating).reversed())
+                .toList();
+    }
+
+    // Java 8 Stream - combined pipeline
+    public List<String> getTopRatedMovieNamesByGenre(String genre) {
+        return movies.stream()
+                .filter(m -> m.getGenre().equalsIgnoreCase(genre))
+                .sorted(Comparator.comparingDouble(Movie::getRating).reversed())
+                .map(Movie::getName)
+                .toList();
+    }
+
+    // Java 8 Stream - Optional
+    public Optional<Movie> getTopRatedMovie() {
+        return movies.stream()
+                .max(Comparator.comparingDouble(Movie::getRating));
+    }
+
+    // Show management
+     public void addShow(Show show) {
+        shows.put(show.getShowId(), show);
+    }
+
+    // Booking logic
+    @Override
+    public Booking bookTicket(User user, int showId, int seatNumber) {
+
+        Show show = shows.get(showId);
+
+        if(show == null) {
+            throw new IllegalArgumentException("Invalid show");
+        }
+
+        if(!show.tryBookSeat(seatNumber)) {
+            throw new IllegalArgumentException("Seat already booked");
+        }
+
+        show.bookedSeat(seatNumber);
+
+        double amount = calculateAmount(show.getMovie());
+        Booking booking = new Booking(bookings.size() + 1, user, show, seatNumber, amount);
+
+        bookings.add(booking);
+
+        return booking;
+    }
+
+    @Override
+    public double calculateAmount(Movie movie) {
+        return 200.0; //fixed as of now
+    }
+
+    // Async flow (book + payment + notification)
     public CompletableFuture<String> bookWithPaymentAndNotification (
         User user,
         int showId,
@@ -72,32 +139,5 @@ public class BookingServiceImpl implements BookingService {
                 });
     }
 
-    @Override
-    public Booking bookTicket(User user, int showId, int seatNumber) {
-
-        Show show = shows.get(showId);
-
-        if(show == null) {
-            throw new IllegalArgumentException("Invalid show");
-        }
-
-        if(!show.tryBookSeat(seatNumber)) {
-            throw new IllegalArgumentException("Seat already booked");
-        }
-
-        show.bookedSeat(seatNumber);
-
-        double amount = calculateAmount(show.getMovie());
-        Booking booking = new Booking(bookings.size() + 1, user, show, seatNumber, amount);
-
-        bookings.add(booking);
-
-        return booking;
-    }
-
-    @Override
-    public double calculateAmount(Movie movie) {
-        return 200.0; //fixed as of now
-    }
 
 }
