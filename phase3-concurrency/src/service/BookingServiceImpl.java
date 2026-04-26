@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class BookingServiceImpl implements BookingService {
 
@@ -58,6 +59,35 @@ public class BookingServiceImpl implements BookingService {
     public Optional<Movie> getTopRatedMovie() {
         return movies.stream()
                 .max(Comparator.comparingDouble(Movie::getRating));
+    }
+
+    // Java 8 Stream - grouping
+    public Map<String, List<Movie>> groupMoviesByGenre() {
+        return movies.stream()
+                .collect(Collectors.groupingBy(Movie::getGenre));
+    }
+
+    public Map<String, Long> countMoviesByGenre() {
+        return movies.stream()
+                .collect(Collectors.groupingBy(
+                        Movie::getGenre,
+                        Collectors.counting()
+                ));
+    }
+
+    public Map<String, List<String>> getMovieNamesByGenre() {
+        return movies.stream()
+                .collect(Collectors.groupingBy(
+                        Movie::getGenre,
+                        Collectors.mapping(Movie::getName, Collectors.toList())
+                ));
+    }
+
+    public Map<Boolean, List<Movie>> partitionByRating() {
+        return movies.stream()
+                .collect(Collectors.partitioningBy(
+                        m -> m.getRating() > 4.5
+                ));
     }
 
     // Show management

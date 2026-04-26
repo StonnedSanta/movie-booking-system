@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import model.BookingStatus;
 import model.Movie;
 import model.Show;
 import model.User;
@@ -39,6 +38,19 @@ public class Main {
         System.out.println("\n--- Top Rated Movie ---");
         service.getTopRatedMovie()
                 .ifPresent(movie -> System.out.println(movie.getName()));
+
+        System.out.println("\n--- Grouped by Genre ---");
+        System.out.println(service.groupMoviesByGenre());
+
+        System.out.println("\n--- Count by Genre ---");
+        System.out.println(service.countMoviesByGenre());
+
+        System.out.println("\n--- Names by Genre ---");
+        System.out.println(service.getMovieNamesByGenre());
+
+        System.out.println("\n--- Partition by Rating ---");
+        System.out.println(service.partitionByRating());       
+
 
         // Async booking flow
         PaymentService paymentService = new PaymentService();
