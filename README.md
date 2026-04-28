@@ -1,4 +1,4 @@
-# Movie Booking System (Java)
+# QMovi (Java)
 A phase-wise Java project built to strengthen backend fundamentals like OOP, collections, and concurrency by simulating a real-world movie ticket booking system.
 
 ---
