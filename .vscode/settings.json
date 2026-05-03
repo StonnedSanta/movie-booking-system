@@ -2,5 +2,7 @@
     "java.project.sourcePaths": [
         "phase3-concurrency/src"
     ],
-    "java.project.referencedLibraries": []
+    "java.project.referencedLibraries": [
+        "/Users/stonnedsanta/Downloads/postgresql-42.7.11.jar"
+    ]
 }
