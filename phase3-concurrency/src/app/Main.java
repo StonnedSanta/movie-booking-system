@@ -1,6 +1,7 @@
 package app;
 
 import service.*;
+import repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,21 @@ import model.User;
 
 public class Main {
     public static void main(String[] args) {
+
+        // DB Part
+        UserRepository userRepo = new UserRepository();
+
+        // Insert users into DB
+        userRepo.addUser("User1", "user1@mail.com");
+        userRepo.addUser("User2", "user2@mail.com");
+        userRepo.addUser("User3", "user3@mail.com");
+        userRepo.addUser("User4", "user4@mail.com");
+        userRepo.addUser("User5", "user5@mail.com");
+
+        // Fetch users from DB
+        List<String> usersFromDb = userRepo.getAllUsers();
+        System.out.println("\n--- Users from DB ---");
+        System.out.println(usersFromDb);
 
         BookingServiceImpl service = new BookingServiceImpl();
 
