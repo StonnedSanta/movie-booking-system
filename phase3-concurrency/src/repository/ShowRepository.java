@@ -13,7 +13,12 @@ public class ShowRepository {
     private final String password = "postgres";
 
     public void addShow(int movieId, String showTime) {
-        String sql = "INSERT INTO shows (movie_id, show_time) VALUES (?, ?)";
+        
+        String sql = """
+        INSERT INTO shows (movie_id, show_time)
+        VALUES (?, ?)
+        ON CONFLICT (movie_id, show_time) DO NOTHING
+        """;
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -33,7 +38,7 @@ public class ShowRepository {
 
         String sql = """
                 SELECT s.id, m.name, s.show_time
-                FROM show s
+                FROM shows s
                 JOIN movies m ON s.movie_id = m.id
                 """;
 

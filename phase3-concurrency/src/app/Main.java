@@ -4,6 +4,7 @@ import service.*;
 import repository.MovieRepository;
 import repository.ShowRepository;
 import repository.UserRepository;
+import repository.BookingRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Main {
         UserRepository userRepo = new UserRepository();
         MovieRepository movieRepo = new MovieRepository();
         ShowRepository showRepo = new ShowRepository();
+        BookingRepository bookingRepo = new BookingRepository();
 
         // Insert users into DB
         userRepo.addUser("User1", "user1@mail.com");
@@ -46,7 +48,7 @@ public class Main {
         System.out.println("\n=== Movies from DB ---");
         System.out.println(movieRepo.getAllMovies());
 
-        // SHows DB
+        // Shows DB
         showRepo.addShow(1, "10:00 AM");
         showRepo.addShow(2, "06:00 PM");
 
@@ -61,63 +63,30 @@ public class Main {
         service.addMovie(m3);
         service.addMovie(m4);
 
-        // Test streams
-        System.out.println("\n--- Movie Names ---");
-        System.out.println(service.getMovieNames());
+        service.addShow(new Show(1, m1, "10:00 AM"));
 
-        System.out.println("\n--- Sorted Movies by Rating ---");
-        System.out.println(service.getMoviesSortedByRating());
-
-        System.out.println("\n--- Top Sci-Fi Movies ---");
-        System.out.println(service.getTopRatedMovieNamesByGenre("Sci Fi"));
-
-        System.out.println("\n--- Top Rated Movie ---");
-        service.getTopRatedMovie()
-                .ifPresent(movie -> System.out.println(movie.getName()));
-
-        System.out.println("\n--- Grouped by Genre ---");
-        System.out.println(service.groupMoviesByGenre());
-
-        System.out.println("\n--- Count by Genre ---");
-        System.out.println(service.countMoviesByGenre());
-
-        System.out.println("\n--- Names by Genre ---");
-        System.out.println(service.getMovieNamesByGenre());
-
-        System.out.println("\n--- Partition by Rating ---");
-        System.out.println(service.partitionByRating());       
-
-
-        // Async booking flow
-        PaymentService paymentService = new PaymentService();
-        NotificationService notificationService = new NotificationService();
+        // Concurrent booking test
+        System.out.println("\n--- Concurrent Booking Test ---");
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
         for (int i = 1; i <= 5; i++) {
             int userId = i;
 
-            User user = new User(userId, "User" + userId);
-
             CompletableFuture<Void> f =
-                service.bookWithPaymentAndNotification(
-                    user, 
-                    1, 
-                    userId, 
-                    paymentService, 
-                    notificationService
-                )
-                .thenAccept(result -> System.out.println("User" + userId + ": " + result))
-                .exceptionally(ex -> {
-                    System.out.println("User" + userId + " failed: " + ex.getCause().getMessage());
-                    return null;
-                });
-                
-        futures.add(f);
-    }
+                    CompletableFuture.runAsync(() -> {
+                        String result = bookingRepo.bookSeat(userId, 1, 1);
+                        System.out.println("User" + userId + ": " + result);
+                    });
+
+                futures.add(f);
+        }
 
         CompletableFuture.allOf(
-            futures.toArray(new CompletableFuture[0])
+                futures.toArray(new CompletableFuture[0])
         ).join();
+
+        System.out.println("\n--- Test Completed ---");
     }
-}   
+
+}
