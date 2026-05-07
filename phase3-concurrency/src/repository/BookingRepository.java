@@ -8,7 +8,9 @@ public class BookingRepository {
     private final String user = "postgres";
     private final String password = "postgres";
 
-    public String bookSeatWithPayment(int userId, int showId, int seatNumber) {
+    public String bookSeatWithLock(int userId, int showId, int seatNumber) {
+
+        String lockSql = "SELECT id FROM shows WHERE id = ? FOR UPDATE";
 
         String insertSql = """
         INSERT INTO bookings (user_id, show_id, seat_number, status)
@@ -24,6 +26,12 @@ public class BookingRepository {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
 
             conn.setAutoCommit(false); // start transaction
+
+            // lock show row
+            try (PreparedStatement lockStmt = conn.prepareStatement(lockSql)) {
+                lockStmt.setInt(1, showId);
+                lockStmt.executeQuery();
+            }
 
             try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
 

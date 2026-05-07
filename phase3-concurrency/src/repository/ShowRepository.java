@@ -2,8 +2,6 @@ package repository;
 
 import java.util.*;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 import java.sql.*;
 
 public class ShowRepository {

@@ -66,8 +66,8 @@ public class Main {
 
         service.addShow(new Show(1, m1, "10:00 AM"));
 
-        // Concurrent booking test
-        System.out.println("\n--- Transaction + Payment Booking Test ---");
+        // row locking booking test
+        System.out.println("\n--- Row Locking Booking Test ---");
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
@@ -76,7 +76,7 @@ public class Main {
 
             CompletableFuture<Void> f =
                     CompletableFuture.runAsync(() -> {
-                        String result = bookingRepo.bookSeatWithPayment(userId, 1, userId);
+                        String result = bookingRepo.bookSeatWithLock(userId, 1, userId);
                         System.out.println("User" + userId + ": " + result);
                     });
 
