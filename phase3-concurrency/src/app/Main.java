@@ -1,6 +1,8 @@
 package app;
 
 import service.*;
+import repository.MovieRepository;
+import repository.ShowRepository;
 import repository.UserRepository;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class Main {
 
         // DB Part
         UserRepository userRepo = new UserRepository();
+        MovieRepository movieRepo = new MovieRepository();
+        ShowRepository showRepo = new ShowRepository();
 
         // Insert users into DB
         userRepo.addUser("User1", "user1@mail.com");
@@ -24,22 +28,38 @@ public class Main {
         userRepo.addUser("User4", "user4@mail.com");
         userRepo.addUser("User5", "user5@mail.com");
 
-        // Fetch users from DB
-        List<String> usersFromDb = userRepo.getAllUsers();
         System.out.println("\n--- Users from DB ---");
-        System.out.println(usersFromDb);
+        System.out.println(userRepo.getAllUsers());
+
+        // Movies (DB + In-Memory bridge)
+        Movie m1 = new Movie(1, "Inception", "Sci Fi", 4.8);
+        Movie m2 = new Movie(2, "Interstellar", "Sci Fi", 4.7);
+        Movie m3 = new Movie(3, "Titanic", "Romance", 4.5);
+        Movie m4 = new Movie(4, "Avengers", "Action", 4.6);
+
+        // Save to DB
+        movieRepo.addMovie(m1);
+        movieRepo.addMovie(m2);
+        movieRepo.addMovie(m3);
+        movieRepo.addMovie(m4);
+
+        System.out.println("\n=== Movies from DB ---");
+        System.out.println(movieRepo.getAllMovies());
+
+        // SHows DB
+        showRepo.addShow(1, "10:00 AM");
+        showRepo.addShow(2, "06:00 PM");
+
+        System.out.println("--- Shows from DB ---");
+        System.out.println(showRepo.getAllShows());
 
         BookingServiceImpl service = new BookingServiceImpl();
 
-        // Add movies
-        service.addMovie(new Movie(1, "Inception", "Sci Fi", 4.8));
-        service.addMovie(new Movie(2, "Interstellar", "Sci Fi", 4.7));
-        service.addMovie(new Movie(3, "Titanic", "Romance", 4.5));
-        service.addMovie(new Movie(4, "Avengers", "Action", 4.6));
-
-        // Add show
-        Show show1 = new Show(1, service.getAvailableMovies().get(0), "10:00 AM");
-        service.addShow(show1);
+        // Add movies to in-memory for existing logic
+        service.addMovie(m1);
+        service.addMovie(m2);
+        service.addMovie(m3);
+        service.addMovie(m4);
 
         // Test streams
         System.out.println("\n--- Movie Names ---");

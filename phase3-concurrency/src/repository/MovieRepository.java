@@ -10,9 +10,13 @@ public class MovieRepository {
     private final String user = "postgres";
     private final String password = "postgres";
 
-    public void addMovies(Movie movie) {
+    public void addMovie(Movie movie) {
         
-        String sql = "INSERT INTO movies (name, genre, rating) VALUES (?, ?, ?)";
+        String sql = """
+        INSERT INTO movies (name, genre, rating) 
+        VALUES (?, ?, ?)
+        ON CONFLICT (name) DO NOTHING
+        """;
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
             PreparedStatement stmt = conn.prepareStatement(sql)) {
