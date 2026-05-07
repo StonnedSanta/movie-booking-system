@@ -1,7 +1,5 @@
 package repository;
 
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.*;
 
 public class BookingRepository {
@@ -10,26 +8,62 @@ public class BookingRepository {
     private final String user = "postgres";
     private final String password = "postgres";
 
-    public String bookSeat(int userId, int showId, int seatNumber) {
+    public String bookSeatWithPayment(int userId, int showId, int seatNumber) {
 
-        String sql = """
+        String insertSql = """
         INSERT INTO bookings (user_id, show_id, seat_number, status)
-        VALUES (?, ?, ?, 'CONFIRMED')
+        VALUES (?, ?, ?, 'PENDING')
         """;
 
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String confirmSql = """
+        UPDATE bookings
+        SET status = 'CONFIRMED'
+        WHERE user_id = ? AND show_id = ? AND seat_number = ?
+        """;
 
-            stmt.setInt(1, userId);
-            stmt.setInt(2, showId);
-            stmt.setInt(3, seatNumber);
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
 
-            stmt.executeUpdate();
+            conn.setAutoCommit(false); // start transaction
 
-            return "Booking CONFIRMED";
-        
-            } catch (SQLException e) {
-                return "Seat already booked";
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+
+            insertStmt.setInt(1, userId);
+            insertStmt.setInt(2, showId);
+            insertStmt.setInt(3, seatNumber);
+
+            insertStmt.executeUpdate();
+
         }
+
+        // simulate payment
+        boolean paymentSuccess = simulatePayment(userId);
+
+        if (!paymentSuccess) {
+            conn.rollback(); //payment failed
+            return "Payment failed -> Booking rolled back";
+        }
+
+        // payment success
+        try (PreparedStatement confirmStmt = conn.prepareStatement(confirmSql)) {
+
+            confirmStmt.setInt(1, userId);
+            confirmStmt.setInt(2, showId);
+            confirmStmt.setInt(3, seatNumber);
+
+            confirmStmt.executeUpdate();
+        }
+
+        conn.commit(); // final commit
+
+        return "Booking CONFIRMED";
+    } catch (SQLException e) {
+        return "Seat already booked!";
+    }
+}    
+            // fake payment logic
+        private boolean simulatePayment(int userId) {
+        
+            // Example: fail for user 3
+            return userId != 3;
     }
 }

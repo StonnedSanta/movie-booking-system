@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import model.Booking;
 import model.Movie;
 import model.Show;
 import model.User;
@@ -66,7 +67,7 @@ public class Main {
         service.addShow(new Show(1, m1, "10:00 AM"));
 
         // Concurrent booking test
-        System.out.println("\n--- Concurrent Booking Test ---");
+        System.out.println("\n--- Transaction + Payment Booking Test ---");
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
@@ -75,7 +76,7 @@ public class Main {
 
             CompletableFuture<Void> f =
                     CompletableFuture.runAsync(() -> {
-                        String result = bookingRepo.bookSeat(userId, 1, 1);
+                        String result = bookingRepo.bookSeatWithPayment(userId, 1, userId);
                         System.out.println("User" + userId + ": " + result);
                     });
 
@@ -85,8 +86,7 @@ public class Main {
         CompletableFuture.allOf(
                 futures.toArray(new CompletableFuture[0])
         ).join();
-
-        System.out.println("\n--- Test Completed ---");
+        
     }
 
 }
