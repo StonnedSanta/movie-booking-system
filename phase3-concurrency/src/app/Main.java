@@ -18,56 +18,26 @@ import model.User;
 public class Main {
     public static void main(String[] args) {
 
-        // DB Part
+        // DB part
         UserRepository userRepo = new UserRepository();
         MovieRepository movieRepo = new MovieRepository();
         ShowRepository showRepo = new ShowRepository();
         BookingRepository bookingRepo = new BookingRepository();
 
-        // Insert users into DB
+        // setup data
         userRepo.addUser("User1", "user1@mail.com");
         userRepo.addUser("User2", "user2@mail.com");
         userRepo.addUser("User3", "user3@mail.com");
         userRepo.addUser("User4", "user4@mail.com");
         userRepo.addUser("User5", "user5@mail.com");
 
-        System.out.println("\n--- Users from DB ---");
-        System.out.println(userRepo.getAllUsers());
+        movieRepo.addMovie(new model.Movie(0, "Inception", "Sci Fi", 4.8));
+        movieRepo.addMovie(new model.Movie(0, "Interstellar", "Sci Fi", 4.7));
 
-        // Movies (DB + In-Memory bridge)
-        Movie m1 = new Movie(1, "Inception", "Sci Fi", 4.8);
-        Movie m2 = new Movie(2, "Interstellar", "Sci Fi", 4.7);
-        Movie m3 = new Movie(3, "Titanic", "Romance", 4.5);
-        Movie m4 = new Movie(4, "Avengers", "Action", 4.6);
-
-        // Save to DB
-        movieRepo.addMovie(m1);
-        movieRepo.addMovie(m2);
-        movieRepo.addMovie(m3);
-        movieRepo.addMovie(m4);
-
-        System.out.println("\n=== Movies from DB ---");
-        System.out.println(movieRepo.getAllMovies());
-
-        // Shows DB
         showRepo.addShow(1, "10:00 AM");
-        showRepo.addShow(2, "06:00 PM");
 
-        System.out.println("--- Shows from DB ---");
-        System.out.println(showRepo.getAllShows());
-
-        BookingServiceImpl service = new BookingServiceImpl();
-
-        // Add movies to in-memory for existing logic
-        service.addMovie(m1);
-        service.addMovie(m2);
-        service.addMovie(m3);
-        service.addMovie(m4);
-
-        service.addShow(new Show(1, m1, "10:00 AM"));
-
-        // row locking booking test
-        System.out.println("\n--- Row Locking Booking Test ---");
+        // row locking booking + retry test
+        System.out.println("\n--- Row Locking + Retry Test ---");
 
         List<CompletableFuture<Void>> futures = new ArrayList<>();
 
@@ -76,7 +46,7 @@ public class Main {
 
             CompletableFuture<Void> f =
                     CompletableFuture.runAsync(() -> {
-                        String result = bookingRepo.bookSeatWithLock(userId, 1, userId);
+                        String result = bookingRepo.bookSeatWithRetry(userId, 1, userId);
                         System.out.println("User" + userId + ": " + result);
                     });
 
@@ -86,6 +56,8 @@ public class Main {
         CompletableFuture.allOf(
                 futures.toArray(new CompletableFuture[0])
         ).join();
+
+        System.out.println("--- Test Completed ---");
         
     }
 

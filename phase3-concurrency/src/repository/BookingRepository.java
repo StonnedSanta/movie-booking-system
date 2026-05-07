@@ -68,10 +68,45 @@ public class BookingRepository {
         return "Seat already booked!";
     }
 }    
-            // fake payment logic
-        private boolean simulatePayment(int userId) {
-        
-            // Example: fail for user 3
-            return userId != 3;
+  
+    public String bookSeatWithRetry(int userId, int showId, int seat_number) {
+            
+        int maxRetries = 3;
+        long delay = 200;
+
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+
+            String result = bookSeatWithLock(userId, showId, seat_number);
+
+            // terminal case
+            if (result.equals("Booking CONFIRMED") ||
+                result.equals("Payment failed -> Booking rolled back")) {
+                    return result;
+                }
+
+            if (result.equals("Seat already booked!")) {
+
+                if (attempt == maxRetries) {
+                    return "Failed after retries";
+                }
+
+                System.out.println("User" + userId + 
+                    " retrying... attempt " + attempt);
+
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ignored) {}
+
+                delay *= 2; // exponential backoff
+            }
+        }
+
+        return "Failed after retires";
+
     }
+
+    // payment simulation
+        private boolean simulatePayment(int userId) {
+            return userId != 3; // user3 fails
+        }
 }
