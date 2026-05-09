@@ -3,7 +3,7 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Movie {
+public class OldMovie {
     private int id; // encapsulation(s)
     private String name;
     private String genre;

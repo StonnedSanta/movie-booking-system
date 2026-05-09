@@ -4,5 +4,6 @@
     ],
     "java.project.referencedLibraries": [
         "/Users/stonnedsanta/Downloads/postgresql-42.7.11.jar"
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
