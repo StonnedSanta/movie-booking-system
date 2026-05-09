@@ -1,62 +1,70 @@
-# QMovi (Java)
-A phase-wise Java project built to strengthen backend fundamentals like OOP, collections, and concurrency by simulating a real-world movie ticket booking system.
+# QMovi (Movie Booking System)
+
+A backend-focused movie booking system built using Java, JDBC, PostgreSQL, and concurrent programming concepts.  
+The project simulates real-world booking scenarios with transaction handling, row-level locking, retries, and idempotent request processing.
+
+Currently evolving into a scalable backend architecture with Spring Boot, REST APIs, monitoring, messaging queues, and distributed system concepts.
 
 ---
 
-## Features (Phase-wise Development)
+## Features
 
-### Phases Covered
-
-* Phase1 - OOP Design
-    Core models (`Movie`, `User`, `Booking`) and service layer
-* Phase2 - Collections & Show Design
-    Introduced `Show`, seat tracking, and `Map`-based management 
-* Phase3 - COncurrency & Multithreading
-    Handled race conditions using fine-grained locking
-    Implemented thread pools using `ExecutorService`
-    Used `Callable` and `Future` for async results
+- Movie & Show Management
+- Concurrent Seat Booking Simulation
+- JDBC + PostgreSQL Integration
+- Transaction Commit / Rollback
+- Row-Level Locking (`FOR UPDATE SKIP LOCKED`)
+- Retry Mechanism with Exponential Backoff
+- Idempotent Booking Requests
+- Async Processing using `CompletableFuture`
 
 ---
 
-## Key Concepts
+## Tech Stack
 
-* OOP (Encapsulation, Abstraction)
-* Java Collections (List, Map, Set)
-* Multithreading & Synchronization
-* ExecutorService (Thread Pools)
-* Callable & Future (Async programming)
+### Current
+- Java
+- JDBC
+- PostgreSQL
+- CompletableFuture
+- SQL Transactions
+
+### In Progress / Planned Architecture
+- Spring Boot REST APIs
+- Hibernate / JPA
+- Swagger/OpenAPI
+- Kafka
+- RabbitMQ
+- Prometheus
+- ELK Stack
+- New Relic
+- OAuth2 / Spring Security
+- MongoDB (for scalable logging/event storage)
 
 ---
 
 ## Project Structure
 
+```plaintext
+src/
+├── app/
+├── model/
+├── repository/
+└── service/
 ```
-movie-booking-system/
-│
-├── phase1-oop/
-├── phase2-collections/
-├── phase3-concurrency/
-└── README.md
-```
----
-
-## Tech Stack
-
-* Java (Core)
-* VS Code
-* Git & GitHub
 
 ---
 
-## Status
+## Sample Output
 
-* Phase 1 - Completed
-* Phase 2 - Completed
-* Phase 3 - Completed
-* Next - Java 8 (Streams, CompletableFuture)
+```plaintext
+User1: Booking CONFIRMED
+User2: Seat already booked!
+User3: Payment failed -> Booking rolled back
+```
 
 ---
 
 ## Author
 
-* Anuj Srivastava
+Anuj Srivastava
