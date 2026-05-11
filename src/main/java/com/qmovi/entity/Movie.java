@@ -8,7 +8,7 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // encapsulation(s)
+    private Long id;
     private String name;
     private String genre;
     private double rating;
@@ -18,7 +18,7 @@ public class Movie {
     }
 
     public Movie(String name, String genre, double rating) {
-        this.name = name;  // this keyword --> refers the current object(s)
+        this.name = name;
         this.genre = genre;
         this.rating = rating;
     }
