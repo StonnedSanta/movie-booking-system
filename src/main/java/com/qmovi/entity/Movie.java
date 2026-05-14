@@ -1,5 +1,7 @@
 package com.qmovi.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,9 +11,15 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String genre;
+
     private double rating;
+
+    @OneToMany(mappedBy = "movie")
+    private List<Show> shows;
 
     public Movie() {
 
@@ -37,6 +45,10 @@ public class Movie {
 
     public double getRating() {
         return rating;
+    }
+
+    public List<Show> getShows() {
+        return shows;
     }
 
     public void setRating(double rating) {
