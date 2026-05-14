@@ -1,7 +1,6 @@
 package com.qmovi.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "shows")
@@ -16,9 +15,6 @@ public class Show {
     @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
-
-    @OneToMany(mappedBy = "show")
-    private List<Booking> bookings;
 
     public Show() {
 
@@ -37,12 +33,8 @@ public class Show {
         return showTime;
     }
 
-    public Movie movie() {
+    public Movie getMovie() {
         return movie;
-    }
-
-    public List<Booking> getBookings() {
-        return bookings;
     }
 
     public void setShowTime(String showTime) {

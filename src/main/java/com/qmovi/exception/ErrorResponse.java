@@ -14,7 +14,7 @@ public class ErrorResponse {
         return message;
     }
 
-    public String getStatus() {
-        return message;
+    public int getStatus() {
+        return status;
     }
 }
