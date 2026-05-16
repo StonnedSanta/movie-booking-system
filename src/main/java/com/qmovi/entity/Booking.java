@@ -23,8 +23,7 @@ public class Booking {
 
     }
 
-    public Booking (Long id, Integer seatNumber, BookingStatus status, Show show) {
-        this.id = id;
+    public Booking (Integer seatNumber, BookingStatus status, Show show) {
         this.seatNumber = seatNumber;
         this.status = status;
         this.show = show;
