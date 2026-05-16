@@ -1,70 +1,73 @@
-# QMovi (Movie Booking System)
+# QMovi
 
-A backend-focused movie booking system built using Java, JDBC, PostgreSQL, and concurrent programming concepts.  
-The project simulates real-world booking scenarios with transaction handling, row-level locking, retries, and idempotent request processing.
+A Spring Boot based Movie Booking backend system demonstrating:
 
-Currently evolving into a scalable backend architecture with Spring Boot, REST APIs, monitoring, messaging queues, and distributed system concepts.
+- REST APIs
+- Layered architecture (Controller → Service → Repository)
+- JPA/Hibernate integration
+- PostgreSQL persistence
+- Swagger/OpenAPI documentation
+- DTO validation
+- Relational entity mapping
 
 ---
 
 ## Features
 
-- Movie & Show Management
-- Concurrent Seat Booking Simulation
-- JDBC + PostgreSQL Integration
-- Transaction Commit / Rollback
-- Row-Level Locking (`FOR UPDATE SKIP LOCKED`)
-- Retry Mechanism with Exponential Backoff
-- Idempotent Booking Requests
-- Async Processing using `CompletableFuture`
+- **Movie Management APIs** (Add/Get movies)
+- **Show Management APIs** (Add/Get shows)
+- **Booking APIs** (Create/Get bookings)
+- Global Exception Handling
+- PostgreSQL database persistence
+- Swagger/OpenAPI documentation
+- DTO validation and relational mapping
 
 ---
 
 ## Tech Stack
 
-### Current
-- Java
-- JDBC
-- PostgreSQL
-- CompletableFuture
-- SQL Transactions
-
-### In Progress / Planned Architecture
-- Spring Boot REST APIs
-- Hibernate / JPA
-- Swagger/OpenAPI
-- Kafka
-- RabbitMQ
-- Prometheus
-- ELK Stack
-- New Relic
-- OAuth2 / Spring Security
-- MongoDB (for scalable logging/event storage)
+- **Java 25**
+- **Spring Boot 3**
+- **PostgreSQL**
+- **Hibernate / JPA**
+- **Gradle**
+- **Swagger/OpenAPI**
+- **Lombok**
 
 ---
 
-## Project Structure
+## Architecture
 
-```plaintext
-src/
-├── app/
-├── model/
-├── repository/
-└── service/
-```
-
----
-
-## Sample Output
-
-```plaintext
-User1: Booking CONFIRMED
-User2: Seat already booked!
-User3: Payment failed -> Booking rolled back
-```
+Controller
+↓
+Service
+↓
+Repository
+↓
+PostgreSQL
 
 ---
 
-## Author
+## API Endpoints
 
-Anuj Srivastava
+| Method | Endpoint       | Description           |
+|--------|----------------|----------------------|
+| POST   | /movies        | Add a new movie       |
+| GET    | /movies        | Get all movies        |
+| POST   | /shows         | Add a new show        |
+| GET    | /shows         | Get all shows         |
+| POST   | /bookings      | Create a booking      |
+| GET    | /bookings      | Get all bookings      |
+
+**Swagger UI:**  
+[Open Swagger UI](http://localhost:8080/swagger-ui/index.html)
+
+---
+
+## Database Setup
+
+1. Install **PostgreSQL**.
+2. Create database:
+
+```sql
+CREATE DATABASE qmovi;
