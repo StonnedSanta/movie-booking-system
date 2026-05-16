@@ -36,18 +36,6 @@ A Spring Boot based Movie Booking backend system demonstrating:
 
 ---
 
-## Architecture
-
-Controller
-↓
-Service
-↓
-Repository
-↓
-PostgreSQL
-
----
-
 ## API Endpoints
 
 | Method | Endpoint       | Description           |
@@ -59,15 +47,62 @@ PostgreSQL
 | POST   | /bookings      | Create a booking      |
 | GET    | /bookings      | Get all bookings      |
 
-**Swagger UI:**  
-[Open Swagger UI](http://localhost:8080/swagger-ui/index.html)
+---
 
+## Clone Repository
+
+```bash
+git clone https://github.com/StonnedSanta/QMovi.git
+cd QMovi
+```
 ---
 
 ## Database Setup
 
-1. Install **PostgreSQL**.
+1. Install PostgreSQL
+
 2. Create database:
 
 ```sql
 CREATE DATABASE qmovi;
+```
+
+3. Create PostgreSQL user:
+
+```sql
+CREATE USER qmovi_user WITH ENCRYPTED PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE qmovi TO qmovi_user;
+```
+
+4. Copy:
+
+```plaintext
+application-example.properties
+```
+
+to:
+
+```plaintext
+application.properties
+```
+
+5. Update credentials inside `application.properties`:
+
+```properties
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+---
+
+## Run Application
+
+```bash
+./gradlew bootRun
+```
+---
+
+## Swagger API Documentation
+
+After starting the app:
+
+http://localhost:8080/swagger-ui/index.html
