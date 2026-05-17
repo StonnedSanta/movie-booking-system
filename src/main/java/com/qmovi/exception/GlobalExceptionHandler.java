@@ -9,22 +9,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(
-            MethodArgumentNotValidException ex
+    @ExceptionHandler(SeatAlreadyBookedException.class)
+    public ResponseEntity<ErrorResponse> handleSeatAlreadyBookedException(
+            SeatAlreadyBookedException ex
     ) {
 
-        String errorMessage = ex
-                .getBindingResult()
-                .getFieldError()
-                .getDefaultMessage();
-
-        ErrorResponse errorResponse =
-                new ErrorResponse(errorMessage, 400);
-
-        return new ResponseEntity<>(
-                errorResponse,
-                HttpStatus.BAD_REQUEST
-        );
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), 400);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+                
     }
 }

@@ -105,4 +105,4 @@ spring.datasource.password=your_password
 
 After starting the app:
 
-http://localhost:8080/swagger-ui/index.html
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)

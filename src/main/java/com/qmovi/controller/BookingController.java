@@ -42,7 +42,7 @@ public class BookingController {
                 show
         );
 
-        return bookingService.createBooking(booking);
+        return bookingService.createBooking(bookingDTO);
     }
 
     @GetMapping
